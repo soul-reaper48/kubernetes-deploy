@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: application-deployment
+  labels:
+    app: guns-app
+spec:
+  replicas: 30
+  selector:
+    matchLabels:
+      name: app-pod
+      app: guns-app
+  template:
+    metadata:
+      name: application
+      labels:
+        name: app-pod
+        app: guns-app
+    spec:
+      containers:
+      - name: guns
+        image: soulreaper48/guns:2.0
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 20

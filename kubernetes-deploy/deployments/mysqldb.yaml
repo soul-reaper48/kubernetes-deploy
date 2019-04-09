@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysqldb-deployment
+  labels:
+    app: guns-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: mysqldb-pod
+      app: guns-app
+  template:
+    metadata:
+      name: mysqldb
+      labels:
+        name: mysqldb-pod
+        app: guns-app
+    spec:
+      containers:
+      - name: mysqldb
+        image: soulreaper48/mysqldb:table
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: root
+        ports:
+        - containerPort: 3306
+      volumes:
+      - name: persistent-volume
+        hostPath:
+          path: /var/mysql_data_backup
+          type: DirectoryOrCreate
+      nodeSelector: 
+        type: backend
