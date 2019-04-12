@@ -25,10 +25,13 @@ spec:
           value: root
         ports:
         - containerPort: 3306
+        volumeMounts:
+        - name: persistent-volume
+          mountPath: /var/lib/mysql
+      nodeSelector:
+        type: backend
       volumes:
       - name: persistent-volume
         hostPath:
           path: /var/mysql_data_backup
           type: DirectoryOrCreate
-      nodeSelector: 
-        type: backend
